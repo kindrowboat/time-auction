@@ -22,7 +22,7 @@ It's presently incomplete. The basics of the simulator live in [`main.py`](./mai
 
 ## Rules for Time Auction
 
-_(source: <https://namu.wiki/w/%EB%8D%B0%EB%B8%94%EC%8A%A4%20%ED%94%8C%EB%9E%9C:%20%EB%8D%B0%EC%8A%A4%EB%A3%B8/2%EC%9D%BC%EC%B0%A8#s-5>)_
+_(source: [https://namu.wiki/w/데블스 플랜: 데스룸/2일차#s-5](https://namu.wiki/w/%EB%8D%B0%EB%B8%94%EC%8A%A4%20%ED%94%8C%EB%9E%9C:%20%EB%8D%B0%EC%8A%A4%EB%A3%B8/2%EC%9D%BC%EC%B0%A8#s-5))_
 
 1. "Time Auction" is a game where you bid using time to win a token.  
 2. Each player is given **10 minutes** of auction funds. Time is recorded to the nearest 0.1 second.  
@@ -216,4 +216,25 @@ RESULTS
   lr-4    4 wins    0.0s left
   lr-5    1 wins    0.0s left
   ed-15   0 wins    4.3s left
+```
+
+## Example strategy file:
+
+You can add a new strategy by make a new file in `strats`. You can use the following example to get you started:
+
+`strats/ere.py`
+
+```python
+import os
+from main import RuleParameters
+
+class Strategy:
+    def __init__(self, rule_parameters: RuleParameters):
+        self.name = os.path.splitext(os.path.basename(__file__))[0]
+        self.description = "Every Round Evenly: bid evenly in each round"
+
+        self.bid_per_round = rule_parameters.total_time / rule_parameters.num_rounds
+
+    def bid(self, round_number: int, history: list, time_left: float) -> float:
+        return self.bid_per_round
 ```
